@@ -1,127 +1,852 @@
-🩺 Medical Q&A Chatbot
+# 🏥 Medical Q&A Chatbot
 
-A specialized Medical Question Answering Chatbot built using the MedQuAD dataset. The chatbot retrieves relevant answers from a curated medical knowledge base and performs basic medical entity recognition (Diseases, Symptoms, Treatments) to help highlight key terms in both the user's question and the retrieved answer.
+A specialized **Medical Question Answering Chatbot** built using the **MedQuAD (Medical Question Answering Dataset)**. The chatbot uses a **retrieval-based Natural Language Processing (NLP) approach** to find the most relevant medical answer for a user's question.
 
-⚠️ Disclaimer: This chatbot is built strictly for educational and learning purposes. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for medical concerns.
+The system combines **TF-IDF vectorization**, **Cosine Similarity**, and **basic medical entity recognition** to provide relevant answers related to diseases, symptoms, and treatments.
 
-📋 Table of Contents
-Project Overview
-Features
-Dataset
-How It Works
-Technologies Used
-Project Structure
-How to Run
-Usage Example
-Limitations
-Future Improvements
-Contributing
-License
-📖 Project Overview
+> ⚠️ **Disclaimer:** This chatbot is developed for educational and research purposes only. It is not a replacement for a qualified medical professional and should not be used for medical diagnosis or treatment decisions.
 
-This project implements a retrieval-based medical chatbot — meaning it does not generate free-form text like a large language model, but instead searches through a fixed dataset of real question-answer pairs and returns the answer that best matches the user's query.
+---
 
-The core matching engine uses TF-IDF (Term Frequency–Inverse Document Frequency) vectorization combined with Cosine Similarity to measure how closely a user's question resembles questions already present in the MedQuAD dataset. The closest match's corresponding answer is returned to the user.
+## 📌 Project Overview
 
-On top of retrieval, the project includes a lightweight medical entity recognition layer that scans text for mentions of diseases, symptoms, and treatments, helping users quickly identify the key medical concepts involved.
+Medical information is available in large amounts on the internet, but finding relevant and reliable answers can sometimes be difficult.
 
-The entire experience is wrapped in a simple, interactive Streamlit web interface, making it easy to run locally and query without any command-line interaction.
+This project develops a simple medical chatbot that allows users to enter questions in natural language. The chatbot searches through the **MedQuAD dataset** and identifies the most relevant question-answer pair using **TF-IDF and Cosine Similarity**.
 
-✨ Features
-Retrieval-based Question Answering — matches user queries against thousands of real medical Q&A pairs from MedQuAD.
-TF-IDF + Cosine Similarity — a classic, interpretable, and lightweight NLP technique for semantic-ish text matching without needing deep learning models.
-Basic Medical Entity Recognition — detects and highlights:
-Diseases (e.g., diabetes, asthma, hypertension)
-Symptoms (e.g., fever, fatigue, nausea)
-Treatments (e.g., medication names, therapies, procedures)
-Simple, Clean Streamlit UI — minimal setup, runs directly in the browser.
-Educational Purpose Only — designed as a learning project for NLP, information retrieval, and healthcare-adjacent applications, not for clinical use.
-🗂️ Dataset
+For example, a user can ask:
 
-MedQuAD — Medical Question Answering Dataset
+```text
+What are the symptoms of diabetes?
+```
 
-Contains thousands of real medical question-answer pairs.
-Collected from trusted NIH (National Institutes of Health) websites and other authoritative U.S. government health sources (e.g., NIDDK, GARD, NINDS, SeniorHealth, MedlinePlus).
-Each entry typically includes:
-A question (e.g., "What are the symptoms of asthma?")
-A question type/focus (e.g., Symptoms, Treatment, Causes)
-An answer sourced from a trusted medical authority
-Used here as the knowledge base that the chatbot searches against when answering user queries.
+The chatbot analyzes the question, compares it with medical questions in the dataset, and retrieves the answer associated with the most similar question.
 
-Note: You will need to obtain the MedQuAD dataset separately (it's publicly available on GitHub) and place it in your project directory before running the app.
+The application also performs basic medical entity recognition to identify entities such as:
 
-⚙️ How It Works
-Preprocessing — The MedQuAD questions are cleaned (lowercased, punctuation removed, stopwords optionally filtered) and converted into TF-IDF vectors.
-Vectorization — A TF-IDF matrix is built from all questions in the dataset, representing each question as a weighted vector of important words.
-User Query Matching — When a user types a question, it's transformed into the same TF-IDF vector space.
-Similarity Scoring — Cosine similarity is computed between the user's query vector and every question vector in the dataset.
-Answer Retrieval — The question with the highest similarity score is selected, and its associated answer is returned to the user.
-Entity Highlighting — A rule-based or dictionary-based scan identifies disease, symptom, and treatment terms in the question/answer for extra context.
-🛠️ Technologies Used
-Technology	Purpose
-Python	Main programming language
-Streamlit	Web User Interface
-Pandas	Dataset loading & handling
-Scikit-learn	TF-IDF Vectorizer & Cosine Similarity
-MedQuAD Dataset	Medical knowledge base
-📁 Project Structure
+* 🦠 Diseases
+* 🤒 Symptoms
+* 💊 Treatments
 
-A typical layout for this kind of project looks like this (adjust to match your actual repo):
+A **Streamlit-based web interface** provides a simple and interactive way for users to communicate with the chatbot.
 
-medical-qa-chatbot/
+---
+
+## 🎯 Objectives
+
+The main objectives of this project are:
+
+1. Build a retrieval-based medical question-answering system.
+2. Use the MedQuAD dataset as the medical knowledge base.
+3. Convert medical questions into numerical vectors using TF-IDF.
+4. Calculate similarity between the user's question and dataset questions.
+5. Retrieve the most relevant medical answer.
+6. Identify basic medical entities such as diseases, symptoms, and treatments.
+7. Develop a simple and user-friendly Streamlit interface.
+8. Demonstrate the use of NLP techniques in the healthcare domain.
+
+---
+
+## ✨ Features
+
+### 1. Medical Question Answering
+
+Users can enter medical questions and receive relevant answers from the MedQuAD dataset.
+
+Example:
+
+```text
+User:
+What are the symptoms of asthma?
+
+Chatbot:
+[Relevant answer retrieved from MedQuAD]
+```
+
+---
+
+### 2. TF-IDF Based Retrieval
+
+The chatbot uses **TF-IDF (Term Frequency-Inverse Document Frequency)** to convert text into numerical vectors.
+
+TF-IDF gives importance to words based on how frequently they appear in a document while reducing the importance of commonly occurring words.
+
+The user's question is converted into a TF-IDF vector and compared with the questions in the dataset.
+
+---
+
+### 3. Cosine Similarity
+
+After converting the questions into vectors, **Cosine Similarity** is used to determine how similar the user's question is to questions in the dataset.
+
+The question with the highest similarity score is selected, and its corresponding answer is returned.
+
+Conceptually:
+
+```text
+User Question
+      ↓
+Text Processing
+      ↓
+TF-IDF Vectorization
+      ↓
+Cosine Similarity
+      ↓
+Find Most Similar Question
+      ↓
+Retrieve Answer
+      ↓
+Display Response
+```
+
+---
+
+### 4. Medical Entity Recognition
+
+The chatbot performs basic recognition of medical entities.
+
+It can identify categories such as:
+
+```text
+Disease
+Symptoms
+Treatment
+```
+
+For example:
+
+```text
+Input:
+What are the symptoms and treatment options for diabetes?
+
+Detected Entities:
+Disease: Diabetes
+Symptoms: Symptoms
+Treatment: Treatment
+```
+
+> Note: The entity recognition component is a basic implementation and is not intended to replace advanced medical NER systems.
+
+---
+
+### 5. Streamlit Web Interface
+
+The chatbot uses **Streamlit** to provide a simple web-based interface.
+
+Users can:
+
+* Enter their medical question
+* Submit the question
+* View the retrieved answer
+* View detected medical entities
+* Interact with the chatbot without using the command line
+
+---
+
+## 📊 Dataset
+
+### MedQuAD
+
+The project uses the **MedQuAD (Medical Question Answering Dataset)**.
+
+MedQuAD contains medical question-answer pairs collected from trusted sources, including information originating from **NIH/National Library of Medicine resources**.
+
+Dataset repository:
+
+**MedQuAD GitHub Repository:**
+https://github.com/abachaa/MedQuAD
+
+The dataset contains information related to various medical topics, including:
+
+* Diseases
+* Symptoms
+* Diagnosis
+* Treatments
+* Prevention
+* Medical conditions
+* Health-related questions
+
+The dataset acts as the chatbot's **knowledge base**.
+
+---
+
+## 🧠 System Architecture
+
+The overall architecture of the project is:
+
+```text
+                 ┌─────────────────────┐
+                 │      User           │
+                 │ Medical Question    │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │   Streamlit UI      │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Text Preprocessing  │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │   TF-IDF Vectorizer │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Cosine Similarity   │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Relevant Question   │
+                 │     Retrieval       │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Retrieve Medical    │
+                 │      Answer         │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Medical Entity      │
+                 │ Recognition         │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Display Answer      │
+                 │ + Entities          │
+                 └─────────────────────┘
+```
+
+---
+
+## 🔄 How the Chatbot Works
+
+### Step 1: Load Dataset
+
+The MedQuAD dataset is loaded using Pandas.
+
+```python
+import pandas as pd
+
+data = pd.read_csv("medquad.csv")
+```
+
+The dataset contains medical questions and their corresponding answers.
+
+---
+
+### Step 2: Preprocess the Data
+
+The questions are cleaned and prepared for vectorization.
+
+Typical preprocessing may include:
+
+* Converting text to lowercase
+* Removing unnecessary spaces
+* Handling missing values
+* Removing unwanted characters
+
+---
+
+### Step 3: Create TF-IDF Vectors
+
+The questions are converted into numerical representations using Scikit-learn's `TfidfVectorizer`.
+
+```python
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+vectorizer = TfidfVectorizer()
+
+question_vectors = vectorizer.fit_transform(data["question"])
+```
+
+---
+
+### Step 4: Process User Question
+
+When the user enters a question, the chatbot converts it into the same TF-IDF representation.
+
+```python
+user_vector = vectorizer.transform([user_question])
+```
+
+---
+
+### Step 5: Calculate Similarity
+
+Cosine Similarity compares the user's question with all questions in the dataset.
+
+```python
+from sklearn.metrics.pairwise import cosine_similarity
+
+similarity = cosine_similarity(
+    user_vector,
+    question_vectors
+)
+```
+
+---
+
+### Step 6: Find the Best Match
+
+The chatbot identifies the question with the highest similarity score.
+
+```python
+best_match = similarity.argmax()
+```
+
+The corresponding answer is then retrieved from the dataset.
+
+---
+
+### Step 7: Display the Answer
+
+The retrieved answer is displayed through the Streamlit interface.
+
+The interface can also display the detected medical entities.
+
+---
+
+## 🧩 Technologies Used
+
+| Technology       | Purpose                                       |
+| ---------------- | --------------------------------------------- |
+| **Python**       | Main programming language                     |
+| **Pandas**       | Dataset loading and data processing           |
+| **Scikit-learn** | TF-IDF and Cosine Similarity                  |
+| **Streamlit**    | Web-based user interface                      |
+| **MedQuAD**      | Medical question-answer knowledge base        |
+| **NLP**          | Natural language processing and text analysis |
+
+---
+
+## 📁 Project Structure
+
+A recommended project structure is:
+
+```text
+Medical-QA-Chatbot/
 │
 ├── data/
-│   └── medquad.csv              # MedQuAD dataset (questions, answers, focus)
+│   └── medquad.csv
 │
-├── app.py                       # Main Streamlit application
-├── chatbot.py                   # Core retrieval logic (TF-IDF + cosine similarity)
-├── entity_recognition.py        # Basic NER for diseases/symptoms/treatments
-├── requirements.txt             # Project dependencies
-└── README.md                    # Project documentation
-🚀 How to Run
-1. Clone the repository
-bash
-git clone https://github.com/your-username/medical-qa-chatbot.git
-cd medical-qa-chatbot
-2. Create a virtual environment (recommended)
-bash
+├── app.py
+│
+├── chatbot.py
+│
+├── entity_recognition.py
+│
+├── requirements.txt
+│
+├── README.md
+│
+└── screenshots/
+    └── chatbot_interface.png
+```
+
+### File Description
+
+| File/Folder             | Description                             |
+| ----------------------- | --------------------------------------- |
+| `data/`                 | Contains the MedQuAD dataset            |
+| `app.py`                | Streamlit application                   |
+| `chatbot.py`            | Question retrieval and similarity logic |
+| `entity_recognition.py` | Medical entity recognition              |
+| `requirements.txt`      | Required Python libraries               |
+| `README.md`             | Project documentation                   |
+| `screenshots/`          | Screenshots of the application          |
+
+---
+
+## ⚙️ Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/Medical-QA-Chatbot.git
+```
+
+Navigate into the project:
+
+```bash
+cd Medical-QA-Chatbot
+```
+
+---
+
+### 2. Create a Virtual Environment
+
+Creating a virtual environment is recommended.
+
+```bash
 python -m venv venv
-source venv/bin/activate      # On Windows: venv\Scripts\activate
-3. Install required libraries
-bash
+```
+
+Activate it on Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+For macOS/Linux:
+
+```bash
+source venv/bin/activate
+```
+
+---
+
+### 3. Install Required Libraries
+
+Run:
+
+```bash
+pip install -r requirements.txt
+```
+
+Or install the main dependencies directly:
+
+```bash
 pip install streamlit pandas scikit-learn
-4. Add the dataset
+```
 
-Download the MedQuAD dataset and place the processed CSV file inside a data/ folder (or update the file path in the code accordingly).
+---
 
-5. Run the Streamlit app
-bash
+## 📦 requirements.txt
+
+The `requirements.txt` file can contain:
+
+```text
+streamlit
+pandas
+scikit-learn
+```
+
+If additional NLP libraries are used in your implementation, they can also be added to this file.
+
+---
+
+## ▶️ How to Run the Project
+
+After installing the required dependencies, run:
+
+```bash
 streamlit run app.py
-6. Open in browser
+```
 
-Streamlit will automatically launch a local server, typically at:
+Streamlit will start the application locally.
 
+Open the URL shown in the terminal, usually:
+
+```text
 http://localhost:8501
-💬 Usage Example
-Launch the app using the steps above.
-Type a medical question into the input box, for example:
+```
 
-"What are the symptoms of type 2 diabetes?"
+---
 
-The chatbot will:
-Search the MedQuAD dataset for the closest matching question
-Return the most relevant answer
-Highlight any recognized diseases, symptoms, or treatments in the response
-⚠️ Limitations
-Not a diagnostic tool — the chatbot cannot interpret personal symptoms or provide medical advice tailored to an individual.
-Retrieval-only — it can only return answers that already exist in the dataset; it does not generate new explanations.
-TF-IDF limitations — this method relies on word overlap and doesn't fully capture semantic meaning, so paraphrased or oddly-worded questions may not match well.
-Entity recognition is rule/dictionary-based — it may miss uncommon terms or misclassify ambiguous words, unlike a trained clinical NER model.
-Dataset scope — answers are limited to what MedQuAD covers; rare conditions or very recent medical developments may not be included.
-🔮 Future Improvements
-Replace TF-IDF with sentence embeddings (e.g., Sentence-BERT) for better semantic matching.
-Integrate a trained biomedical NER model (e.g., spaCy's en_core_sci_md or scispaCy) for more accurate entity recognition.
-Add confidence scores to show how certain the chatbot is about a retrieved answer.
-Support follow-up questions with conversational context.
-Add source citations/links back to the original NIH resource for each answer.
-Deploy the app publicly (e.g., Streamlit Community Cloud) for easier access.
+## 💻 Example Usage
+
+### User Input
+
+```text
+What are the symptoms of diabetes?
+```
+
+### Chatbot Process
+
+```text
+User Question
+      ↓
+TF-IDF Transformation
+      ↓
+Compare with MedQuAD Questions
+      ↓
+Calculate Cosine Similarity
+      ↓
+Find Highest Similarity
+      ↓
+Retrieve Corresponding Answer
+```
+
+### Output
+
+```text
+Answer:
+[Relevant answer retrieved from MedQuAD]
+
+Medical Entities:
+Disease: Diabetes
+```
+
+---
+
+## 🔍 Retrieval Method
+
+The chatbot follows a **retrieval-based approach** rather than generating new medical information.
+
+This means that the system does not create an answer from scratch.
+
+Instead:
+
+```text
+User Question
+      ↓
+Search MedQuAD
+      ↓
+Find Similar Question
+      ↓
+Retrieve Existing Answer
+```
+
+This approach is useful because the chatbot's responses are based on information available in the dataset rather than freely generated responses.
+
+---
+
+## 📐 Cosine Similarity
+
+Cosine Similarity measures the similarity between two vectors.
+
+It can be represented as:
+
+```text
+                    A · B
+Cosine Similarity = ────────
+                    ||A|| ||B||
+```
+
+Where:
+
+* `A` = Vector representing the user's question
+* `B` = Vector representing a dataset question
+* `A · B` = Dot product
+* `||A||` and `||B||` = Magnitudes of the vectors
+
+A higher similarity score indicates that the questions are more similar.
+
+---
+
+## 🏥 Medical Entity Recognition
+
+The project includes a basic medical entity recognition component.
+
+The purpose is to identify important medical terms in the user's query.
+
+### Example
+
+Input:
+
+```text
+What are the symptoms and treatments for asthma?
+```
+
+Possible output:
+
+```text
+Disease:
+Asthma
+
+Symptoms:
+Symptoms
+
+Treatment:
+Treatments
+```
+
+The entity recognition component can be further improved using advanced NLP libraries and medical terminology databases.
+
+---
+
+## 🖥️ User Interface
+
+The Streamlit application provides:
+
+* Application title
+* Medical question input box
+* Submit/search button
+* Retrieved answer section
+* Medical entity section
+* Educational disclaimer
+
+Example interface:
+
+```text
+╔══════════════════════════════════════╗
+║       🏥 Medical Q&A Chatbot         ║
+╠══════════════════════════════════════╣
+║                                      ║
+║  Ask your medical question:          ║
+║  ┌────────────────────────────────┐  ║
+║  │ What are symptoms of asthma?  │  ║
+║  └────────────────────────────────┘  ║
+║                                      ║
+║           [ Get Answer ]             ║
+║                                      ║
+║  📖 Answer                            ║
+║  Relevant answer from MedQuAD...     ║
+║                                      ║
+║  🔎 Medical Entities                 ║
+║  Disease: Asthma                     ║
+║                                      ║
+╚══════════════════════════════════════╝
+```
+
+---
+
+## 🚀 Future Improvements
+
+The current chatbot can be improved in several ways.
+
+### 1. Advanced NLP Models
+
+Replace TF-IDF with modern sentence embeddings such as:
+
+* Sentence Transformers
+* BERT
+* BioBERT
+* ClinicalBERT
+
+This can improve semantic understanding.
+
+---
+
+### 2. Better Medical Entity Recognition
+
+Use specialized medical NLP models to identify:
+
+* Diseases
+* Symptoms
+* Medicines
+* Treatments
+* Procedures
+* Body parts
+* Medical tests
+
+---
+
+### 3. Confidence Score
+
+The chatbot can display a similarity score for the retrieved answer.
+
+Example:
+
+```text
+Match Confidence: 87%
+```
+
+If the similarity score is too low, the chatbot can respond:
+
+```text
+I could not find a sufficiently relevant answer.
+Please consult a qualified healthcare professional.
+```
+
+---
+
+### 4. Conversation History
+
+The chatbot can be improved to remember previous questions within a session.
+
+Example:
+
+```text
+User:
+What is diabetes?
+
+Bot:
+[Answer]
+
+User:
+What are its symptoms?
+
+Bot:
+[Answer related to diabetes]
+```
+
+---
+
+### 5. Voice Input
+
+Voice recognition can be added so users can ask questions using speech.
+
+---
+
+### 6. Multilingual Support
+
+The chatbot can be extended to support multiple languages such as:
+
+* English
+* Hindi
+* Kannada
+* Telugu
+* Tamil
+
+---
+
+### 7. Deployment
+
+The Streamlit application can be deployed online using suitable cloud hosting services so that users can access the chatbot through a web browser.
+
+---
+
+## ⚠️ Limitations
+
+This project has some important limitations:
+
+* It is a retrieval-based system and does not generate original medical explanations.
+* The quality of answers depends on the MedQuAD dataset.
+* TF-IDF may not understand deeper semantic meaning.
+* Basic entity recognition may produce incorrect or incomplete results.
+* The chatbot cannot diagnose diseases.
+* The chatbot cannot replace a doctor or healthcare professional.
+* Medical emergencies should always be handled by qualified healthcare professionals.
+
+---
+
+## 🔐 Medical Safety Disclaimer
+
+> **Important:** This chatbot is intended only for educational and informational purposes. The responses provided by the system should not be considered professional medical advice, diagnosis, or treatment. Users should consult a qualified doctor or healthcare professional for medical concerns, symptoms, diagnosis, or treatment decisions.
+
+---
+
+## 📈 Project Workflow
+
+```text
+MedQuAD Dataset
+       │
+       ▼
+Data Cleaning & Preprocessing
+       │
+       ▼
+Medical Questions
+       │
+       ▼
+TF-IDF Vectorization
+       │
+       ▼
+User Enters Question
+       │
+       ▼
+User Question → TF-IDF
+       │
+       ▼
+Cosine Similarity
+       │
+       ▼
+Most Relevant Question
+       │
+       ▼
+Retrieve Medical Answer
+       │
+       ├───────────────┐
+       ▼               ▼
+Medical Entity      Streamlit
+Recognition            UI
+       │               │
+       └───────┬───────┘
+               ▼
+          Final Response
+```
+
+---
+
+## 🎓 Learning Outcomes
+
+Through this project, the following concepts can be learned:
+
+* Natural Language Processing
+* Text preprocessing
+* TF-IDF vectorization
+* Cosine Similarity
+* Information retrieval
+* Basic Named Entity Recognition
+* Dataset handling using Pandas
+* Building web applications using Streamlit
+* Creating a retrieval-based chatbot
+* Working with medical QA datasets
+* Basic healthcare AI concepts
+
+---
+
+## 🧪 Testing
+
+The chatbot can be tested using different types of medical questions.
+
+Example test cases:
+
+| User Question                         | Expected Result                   |
+| ------------------------------------- | --------------------------------- |
+| What are the symptoms of diabetes?    | Relevant diabetes information     |
+| What causes asthma?                   | Relevant asthma information       |
+| What are treatments for hypertension? | Relevant hypertension information |
+| What is anemia?                       | Relevant anemia information       |
+| What are the symptoms of flu?         | Relevant flu information          |
+
+Testing different questions helps evaluate how effectively the retrieval system finds relevant answers.
+
+---
+
+## 🔮 Future Scope
+
+This project can be developed into a more advanced **AI-powered medical information assistant** by integrating:
+
+```text
+Advanced Embeddings
+       +
+Vector Database
+       +
+Medical NLP Models
+       +
+RAG Architecture
+       +
+Medical Entity Recognition
+       +
+Conversation Memory
+       +
+Streamlit / Web Application
+```
+
+A future version could use **Retrieval-Augmented Generation (RAG)** to retrieve reliable medical information and generate easier-to-understand responses while maintaining references to the underlying medical sources.
+
+---
+
+## 👨‍💻 Project Information
+
+**Project:** Medical Q&A Chatbot
+**Domain:** Artificial Intelligence / Machine Learning / NLP
+**Type:** Retrieval-Based Chatbot
+**Dataset:** MedQuAD
+**Interface:** Streamlit
+**Language:** Python
+
+---
+
+## ⭐ Conclusion
+
+The **Medical Q&A Chatbot** demonstrates how Natural Language Processing and information retrieval techniques can be used to build a simple healthcare-oriented question-answering system.
+
+By combining the **MedQuAD dataset**, **TF-IDF**, **Cosine Similarity**, **basic medical entity recognition**, and **Streamlit**, the project provides an easy-to-use interface for retrieving relevant medical information.
+
+The project also provides a foundation for future development using advanced NLP models, semantic search, medical Named Entity Recognition, and Retrieval-Augmented Generation.
+
+---
+
+## 📚 References
+
+* MedQuAD Dataset: https://github.com/abachaa/MedQuAD
+* Scikit-learn Documentation: https://scikit-learn.org/
+* Streamlit Documentation: https://docs.streamlit.io/
+* Pandas Documentation: https://pandas.pydata.org/
+
+---
+
+
+
+This project is intended for **educational and academic purposes**. Please check the licensing and usage terms of the MedQuAD dataset before redistributing the dataset or derived materials.
